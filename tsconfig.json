@@ -21,6 +21,7 @@
       "@helpers/*": ["./src/helpers/*"],
       "@models/*": ["./src/models/*"],
       "@repositories/*": ["./src/repositories/*"],
+      "@services/*": ["./src/services/*"],
     }
   },
   "include": ["src/**/*"]

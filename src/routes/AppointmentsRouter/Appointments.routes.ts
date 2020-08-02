@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import Appointment from '@models/Appointment'
-import { errorMessages as errorMsg } from './AppointmentsErrorTypes'
 import AppointmentRepository from '@repositories/AppointmentRepository'
-import { startOfHour, parseISO } from '@helpers/dataHelpers'
+import CreateAppointmentService from '@services/CreateAppointmentService/CreateAppointmentService'
+import { parseISO } from '@helpers/dataHelpers'
 
 const AppointmentsRouter = Router()
 const appointmentRepository = new AppointmentRepository()
@@ -13,25 +13,19 @@ AppointmentsRouter.get('/', (req, res) => {
 })
 
 AppointmentsRouter.post('/', (req, res) => {
-  const { provider, date } = req.body
+  try {
+    const { provider, date } = req.body
 
-  const parsedDate = startOfHour(parseISO(date))
-  const findAppointmentInSameDate = appointmentRepository.findByDate(parsedDate)
+    const parsedDate = parseISO(date)
 
-  if (findAppointmentInSameDate) {
-    return res.status(401)
-      .json({
-        error: 'appointment_date_not_allow',
-        message: errorMsg.APPOINTMENT_DATE_NOT_ALLOW
-      })
+    const createAppointment = new CreateAppointmentService(appointmentRepository)
+
+    const appointment = createAppointment.execute({ date: parsedDate, provider })
+
+    return res.json(appointment)
+  } catch (err) {
+    return res.status(400).json({ error: err.message })
   }
-
-  const appointment = appointmentRepository.create({
-    provider,
-    date: parsedDate
-  })
-
-  return res.json(appointment)
 })
 
 export default AppointmentsRouter
