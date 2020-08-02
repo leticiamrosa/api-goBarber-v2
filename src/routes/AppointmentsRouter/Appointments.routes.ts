@@ -1,13 +1,12 @@
-import { Router, response } from 'express'
-import { id } from '@utils/uuid'
-import Appointments from 'src/routes/AppointmentsRouter/Appointments'
+import { Router } from 'express'
+import Appointment from '@models/Appointment'
 import { errorMessages as errorMsg } from './AppointmentsErrorTypes'
 
 import { startOfHour, parseISO, isEqual } from '@helpers/dataHelpers'
 
 const AppointmentsRouter = Router()
 
-const appointments: Appointments[] = []
+const appointments: Appointment[] = []
 
 AppointmentsRouter.post('/', (req, res) => {
   const { provider, date } = req.body
@@ -23,11 +22,7 @@ AppointmentsRouter.post('/', (req, res) => {
       })
   }
 
-  const appointment: Appointments = {
-    id,
-    provider,
-    date: parsedDate
-  }
+  const appointment: Appointment = new Appointment(provider, parsedDate)
 
   appointments.push(appointment)
 

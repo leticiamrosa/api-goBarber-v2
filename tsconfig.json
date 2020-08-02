@@ -18,7 +18,8 @@
     "paths": {
       "@config/*": ["./src/config/*"],
       "@utils/*": ["./src/utils/*"],
-      "@helpers/*": ["./src/helpers/*"]
+      "@helpers/*": ["./src/helpers/*"],
+      "@models/*": ["./src/models/*"]
     }
   },
   "include": ["src/**/*"]
