@@ -5,7 +5,7 @@ export class Appointment {
   provider: string;
   date: Date;
 
-  public constructor (provider: string, date: Date) {
+  public constructor ({ provider, date }: Omit<Appointment, 'id'>) {
     this.id = id
     this.provider = provider
     this.date = date
