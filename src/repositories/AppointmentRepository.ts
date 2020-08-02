@@ -1,11 +1,15 @@
 import Appointment from '@models/Appointment'
-import { startOfHour, parseISO, isEqual } from '@helpers/dataHelpers'
+import { isEqual } from '@helpers/dataHelpers'
 
 class AppointmentRepository {
   private appointments: Appointment[];
 
   constructor () {
     this.appointments = []
+  }
+
+  public all (): Appointment[] {
+    return this.appointments
   }
 
   public create (provider:string, date: Date): Appointment {

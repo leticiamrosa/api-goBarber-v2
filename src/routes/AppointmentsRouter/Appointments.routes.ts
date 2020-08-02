@@ -2,10 +2,15 @@ import { Router } from 'express'
 import Appointment from '@models/Appointment'
 import { errorMessages as errorMsg } from './AppointmentsErrorTypes'
 import AppointmentRepository from '@repositories/AppointmentRepository'
-import { startOfHour, parseISO, isEqual } from '@helpers/dataHelpers'
+import { startOfHour, parseISO } from '@helpers/dataHelpers'
 
 const AppointmentsRouter = Router()
 const appointmentRepository = new AppointmentRepository()
+
+AppointmentsRouter.get('/', (req, res) => {
+  const appointments = appointmentRepository.all()
+  return res.status(200).json(appointments)
+})
 
 AppointmentsRouter.post('/', (req, res) => {
   const { provider, date } = req.body
