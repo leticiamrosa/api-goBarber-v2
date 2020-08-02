@@ -1,18 +1,17 @@
 import { Router } from 'express'
 import Appointment from '@models/Appointment'
 import { errorMessages as errorMsg } from './AppointmentsErrorTypes'
-
+import AppointmentRepository from '@repositories/AppointmentRepository'
 import { startOfHour, parseISO, isEqual } from '@helpers/dataHelpers'
 
 const AppointmentsRouter = Router()
-
-const appointments: Appointment[] = []
+const appointmentRepository = new AppointmentRepository()
 
 AppointmentsRouter.post('/', (req, res) => {
   const { provider, date } = req.body
 
   const parsedDate = startOfHour(parseISO(date))
-  const findAppointmentInSameDate = appointments.find((appointment) => isEqual(parsedDate, appointment.date))
+  const findAppointmentInSameDate = appointmentRepository.findByDate(parsedDate)
 
   if (findAppointmentInSameDate) {
     return res.status(401)
@@ -22,9 +21,7 @@ AppointmentsRouter.post('/', (req, res) => {
       })
   }
 
-  const appointment: Appointment = new Appointment(provider, parsedDate)
-
-  appointments.push(appointment)
+  const appointment = appointmentRepository.create(provider, parsedDate)
 
   return res.json(appointment)
 })

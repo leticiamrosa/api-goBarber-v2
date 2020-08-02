@@ -19,7 +19,8 @@
       "@config/*": ["./src/config/*"],
       "@utils/*": ["./src/utils/*"],
       "@helpers/*": ["./src/helpers/*"],
-      "@models/*": ["./src/models/*"]
+      "@models/*": ["./src/models/*"],
+      "@repositories/*": ["./src/repositories/*"],
     }
   },
   "include": ["src/**/*"]
