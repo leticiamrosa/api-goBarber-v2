@@ -1,6 +1,7 @@
-import express from 'express'
+import 'reflect-metadata'
 
-import routes from './routes/routes'
+import express from 'express'
+import routes from './routes/Routes'
 
 class App {
   public server: express.Application;

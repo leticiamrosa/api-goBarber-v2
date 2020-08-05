@@ -1,26 +1,27 @@
 import { Router } from 'express'
 import Appointment from '@models/Appointment'
 import AppointmentRepository from '@repositories/AppointmentRepository'
+import { getCustomRepository } from 'typeorm'
 import CreateAppointmentService from '@services/CreateAppointmentService/CreateAppointmentService'
 import { parseISO } from '@helpers/dataHelpers'
 
 const AppointmentsRouter = Router()
-const appointmentRepository = new AppointmentRepository()
 
-AppointmentsRouter.get('/', (req, res) => {
-  const appointments = appointmentRepository.all()
+AppointmentsRouter.get('/', async (req, res) => {
+  const appointmentRepository = getCustomRepository(AppointmentRepository)
+  const appointments = await appointmentRepository.find()
   return res.status(200).json(appointments)
 })
 
-AppointmentsRouter.post('/', (req, res) => {
+AppointmentsRouter.post('/', async (req, res) => {
   try {
     const { provider, date } = req.body
 
     const parsedDate = parseISO(date)
 
-    const createAppointment = new CreateAppointmentService(appointmentRepository)
+    const createAppointment = new CreateAppointmentService()
 
-    const appointment = createAppointment.execute({ date: parsedDate, provider })
+    const appointment = await createAppointment.execute({ date: parsedDate, provider })
 
     return res.json(appointment)
   } catch (err) {
